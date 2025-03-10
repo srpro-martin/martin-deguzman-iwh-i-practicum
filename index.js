@@ -44,7 +44,34 @@ app.get('/update-cobj', (req, res) => {
 // * Code for Route 2 goes here
 
 // TODO: ROUTE 3 - Create a new app.post route for the custom objects form to create or update your custom object data. Once executed, redirect the user to the homepage.
+app.post('/update-cobj', async (req, res) => {
+    const { name, species, age } = req.body;
 
+    if (!name || !species || !age) {
+        return res.status(400).send("All fields are required");
+    }
+
+    try {
+        const response = await axios.post(HUBSPOT_API_URL, {
+            properties: {
+                name,
+                species,
+                age
+            }
+        }, {
+            headers: {
+                Authorization: `Bearer ${HUBSPOT_ACCESS_TOKEN}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        console.log("New record created:", response.data);
+        res.redirect('/');
+    } catch (error) {
+        console.error("Error creating record:", error.response ? error.response.data : error.message);
+        res.status(500).send("Error creating record");
+    }
+});
 // * Code for Route 3 goes here
 
 /** 
