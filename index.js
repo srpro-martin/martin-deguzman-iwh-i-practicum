@@ -1,17 +1,40 @@
 const express = require('express');
 const axios = require('axios');
+const dotenv = require('dotenv');
+const path = require('path');
+
+dotenv.config();
 const app = express();
 
 app.set('view engine', 'pug');
-app.use(express.static(__dirname + '/public'));
+app.set('views', path.join(__dirname, 'views'));
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static('public'));
 
 // * Please DO NOT INCLUDE the private app access token in your repo. Don't do this practicum in your normal account.
-const PRIVATE_APP_ACCESS = '';
+const HUBSPOT_API_URL = "https://api.hubapi.com/crm/v3/objects/pets";
+const HUBSPOT_ACCESS_TOKEN = process.env.HUBSPOT_ACCESS_TOKEN;
 
 // TODO: ROUTE 1 - Create a new app.get route for the homepage to call your custom object data. Pass this data along to the front-end and create a new pug template in the views folder.
+app.get('/', async (req, res) => {
+    try {
+        const response = await axios.get(`${HUBSPOT_API_URL}?properties=name,species,age`, {
+            headers: {
+                Authorization: `Bearer ${HUBSPOT_ACCESS_TOKEN}`,
+                'Content-Type': 'application/json'
+            }
+        });
 
+        const records = response.data.results || [];
+
+        res.render('homepage', { title: 'Custom Object Records', records });
+    } catch (error) {
+        console.error("Error fetching records:", error.response ? error.response.data : error.message);
+        res.status(500).send("Error retrieving records");
+    }
+});
 // * Code for Route 1 goes here
 
 // TODO: ROUTE 2 - Create a new app.get route for the form to create or update new custom object data. Send this data along in the next route.

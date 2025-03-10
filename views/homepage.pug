@@ -1,0 +1,18 @@
+doctype html
+html
+  head
+    title= title
+  body
+    h1 Custom Object Records
+    table(border="1")
+      thead
+        tr
+          th Name
+          th Species
+          th Age
+      tbody
+        each record in records
+          tr
+            td= record.properties.name
+            td= record.properties.species
+            td= record.properties.age
