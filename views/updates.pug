@@ -3,7 +3,7 @@ html
   head
     title= title
   body
-    h1 Update Custom Object Form
+    h1= title
     form(action="/update-cobj" method="POST")
       label(for="name") Name:
       input(type="text" name="name" required)

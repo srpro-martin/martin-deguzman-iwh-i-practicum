@@ -39,7 +39,7 @@ app.get('/', async (req, res) => {
 
 // TODO: ROUTE 2 - Create a new app.get route for the form to create or update new custom object data. Send this data along in the next route.
 app.get('/update-cobj', (req, res) => {
-    res.render('updates', { title: 'Update Custom Object Form' });
+    res.render('updates', { title: 'Update Custom Object Form | Integrating With HubSpot I Practicum' });
 });
 // * Code for Route 2 goes here
 
